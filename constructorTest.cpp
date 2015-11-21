@@ -1,4 +1,4 @@
-nclude <iostream>  
+#include <iostream>  
 #include <iterator>  
 #include <algorithm>  
 #include <fstream>  
