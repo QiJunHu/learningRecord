@@ -43,6 +43,7 @@ HasPtr&  HasPtr::operator= (HasPtr& h)
     ++(*(h.pCount));
     --(*pCount);
 
+   pCount = h.pCount;
 
     return *this;
 
@@ -50,11 +51,13 @@ HasPtr&  HasPtr::operator= (HasPtr& h)
 
 HasPtr::~HasPtr()
 {
-    delete ptr;
     --(*pCount);
 
     if(0  ==  (*pCount))
-        delete pCount;
+    {
+         delete ptr;
+         delete pCount;
+    }
 }
 
 
