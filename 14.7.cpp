@@ -84,6 +84,11 @@ int main()
     std::cout<<record1<<std::endl;
 
 
+    Date date1;
+    std::cout<<date1<<std::endl;
+    std::cin>>date1;
+    std::cout<<date1<<std::endl;
+
     return 0;
 }
 
