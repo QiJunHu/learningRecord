@@ -1,5 +1,5 @@
 //////////////////////////////////////////////////
-/*    author huqijun ,20151126               */
+/*    author huqijun ,modify time 20151129      */
 //////////////////////////////////////////////////
 
 
@@ -110,6 +110,91 @@ Date & Date::operator+=(const Date& d)
 }
 
 
+
+
+
+//class Foo
+class Foo
+{
+    public:
+        Foo():data(10,1) {}
+        int& operator[] (const std::size_t);
+        const int& operator[](const std::size_t)  const;
+    private:
+        std::vector<int> data;
+};
+
+
+int& Foo::operator[] (const std::size_t index)
+{
+    std::cout<<"operator[] of Foo is called"<<std::endl;
+    return data[index];
+}
+
+const int& Foo::operator[](const std::size_t  index)  const
+{
+     std::cout<<"operator[] const of Foo is called"<<std::endl;
+    return data[index];
+}
+
+
+
+//class HasPtr
+class HasPtr
+{
+
+    public:
+        //default constructor
+        HasPtr():p(new int) {}
+        //constructor
+        HasPtr(int * i):p(i) {}
+        //copy control
+        HasPtr(const HasPtr &  m)  { *p = *(m.p) ;}
+        int operator* () { return *p;}
+        int * operator->() { return p;}
+    private:
+        int * p;
+};
+
+
+class autoAdd
+{
+
+    public:
+        friend std::istream & operator>>(std::istream & , autoAdd &);
+        friend std::ostream & operator<<(std::ostream &, const autoAdd &);
+        //default constructor
+        autoAdd():i(0) {  std::cout<<"default constructor  of autoAdd is called"<<std::endl;}
+        //copy control
+        autoAdd(const autoAdd& m):i(m.i)  {  std::cout<<"copy constructor  of autoAdd is called"<<std::endl;}
+        autoAdd & operator=(const autoAdd & m) { std::cout<<"operator=  of autoAdd is called"<<std::endl; i = m.i;   return *this;}
+
+        autoAdd& operator++() {  std::cout<<"prefix operator++   of autoAdd is called"<<std::endl;  ++i; return *this;}
+        autoAdd operator++(int) {  std::cout<<"postfix operator++   of autoAdd is called"<<std::endl;  autoAdd ret(*this);  i++; return ret;}
+        autoAdd& operator--() { std::cout<<"prefix operator--   of autoAdd is called"<<std::endl;   --i; return *this; }
+        autoAdd operator--(int) {std::cout<<"postfix operator--   of autoAdd is called"<<std::endl; autoAdd ret(*this);  i--; return ret; }
+    private:
+        int i;
+};
+
+
+std::istream & operator>>(std::istream & i , autoAdd & a)
+{
+    std::cout<<"operator>> of autoAdd is called"<<std::endl;
+    i>>a.i;
+    return i;
+}
+
+
+std::ostream & operator<<(std::ostream & o, const autoAdd & a)
+{
+    std::cout<<"operator<< of autoAdd is called"<<std::endl;
+    o<<a.i;
+    return o;
+}
+
+
+//test code
 int main()
 {
 
@@ -129,6 +214,35 @@ int main()
     date5 = date1;
 
 
-    return 0;
+   // test operator[]
+   Foo f;
+   std::cout<<f[2]<<std::endl;
+   f[1] = 3;
+
+    int t = 3;
+    HasPtr has1(&t);
+    std::cout<<*has1<<std::endl;
+    std::cout<<*( has1.operator->() )<<std::endl;
+
+
+   // test class autoAdd
+   autoAdd a1;
+   std::cout<<a1<<std::endl;
+   std::cin>>a1;
+   std::cout<<a1<<std::endl;
+   ++a1;
+   std::cout<<a1<<std::endl;
+   a1++;
+   std::cout<<a1<<std::endl;
+   std::cout<<a1++<<std::endl;
+   --a1;
+   std::cout<<a1<<std::endl;
+   a1--;
+   std::cout<<a1<<std::endl;
+   return 0;
+
+
+
+
 }
 
