@@ -118,8 +118,9 @@ int main()
         ivec2.push_back(i);
     }
 
-    std::for_each(ivec2.begin(),ivec2.end(),std::bind2nd(std::multiplies<int>(),2) );
-
+   // std::for_each(ivec2.begin(),ivec2.end(),std::bind2nd(std::multiplies<int>(),2) );
+   //std::for_each will igonre the result of funciont
+    std::transform(b.begin(),b.end(), b.begin(),std::bind2nd(std::multiplies<int>(),2) );
     for(std::vector<int>::iterator i = ivec2.begin() ;  i!= ivec2.end()  ; ++i)
     {
         std::cout<<*i<<std::endl;
