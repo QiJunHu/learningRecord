@@ -1,5 +1,5 @@
 //////////////////////////////////////////////////
-/*    author huqijun ,modify time 20160102      */
+/*    author huqijun ,modify time 20160103      */
 //////////////////////////////////////////////////
 
 
@@ -378,6 +378,8 @@ void print_results2(const std::set<TextQuery::line_no>& locs, Query& q, const Te
 }
 
 
+
+//test function
 void TestSchema(TextQuery & tq)
 {
 	std::cout << "Exmple Query Condition:" << std::endl
@@ -390,7 +392,7 @@ void TestSchema(TextQuery & tq)
 	{
 		std::cout << "Enter a condition to look for, or q to quit" << std::endl;
 		std::string s;
-		std::cin >> s;
+		std::getline(std::cin, s);
 		//handle user input
 		if (!std::cin || s == "q")
 			break;
@@ -408,32 +410,38 @@ void TestSchema(TextQuery & tq)
 
 		Query q("");
 		std::set<TextQuery::line_no> locs;
+		std::string tempOfOne;
 
 		switch (numOfOperands)
 		{
 		case 1:
-			q = Query(svec[0]);
-			locs = q.eval(tq);
-			print_results2(locs, q, tq);
+			if (svec[0][0] == '~')
+			{
+				tempOfOne = svec[0].substr(1);
+				q = ~Query(tempOfOne);
+			}
+			else 
+				q = Query(svec[0]);
 			break;
 		case 2:
-			q = ~Query(svec[1]);
-			locs = q.eval(tq);
-			print_results2(locs, q, tq);
+			if (svec[0] == "~")
+			{
+				q = ~Query(svec[1]);
+			}
 			break;
 		case 3:
 			if (svec[1] == "&")
 				q = Query(svec[0]) & Query(svec[2]);
 			else if (svec[1] == "|")
 				q = Query(svec[0]) | Query(svec[2]);
-			locs = q.eval(tq);
-			print_results2(locs, q, tq);
+
 			break;
 		default:
 			break;
 		}
 
-
+		locs = q.eval(tq);
+		print_results2(locs, q, tq);
 			
 	}
 	
@@ -453,11 +461,9 @@ int main()
 	TextQuery tq;
 	tq.read_file(infile);
 
-
-
-	//TestSchema(tq);
-
-
+	std::cout << "********************************************************" << std::endl;
+	std::cout << "Starting One By One Test                                " << std::endl;
+	std::cout << "********************************************************" << std::endl;
 
 	//test TextQuery
 	std::cout << "Starting Testing TextQuery class" << std::endl;
@@ -474,7 +480,8 @@ int main()
 	}
 
 	std::cout << "Ending Testing TextQuery class" << std::endl;
-
+	
+	std::cout << std::endl << std::endl;
 
 	//test WordQuery
 	std::cout << "Starting Testing WordQuery class" << std::endl;
@@ -493,13 +500,47 @@ int main()
 
 	std::cout << "Ending Testing WordQuery class" << std::endl;
 
+	std::cout << std::endl << std::endl;
+
+	//test NotQuery
+	std::cout << "Starting Testing NotQuery class" << std::endl;
+	while (true)
+	{
+		std::cout << "Enter a word to look for ,or q to quit: " << std::endl;
+		std::string s;
+		std::cin >> s;
+		if (!std::cin || s == "q")
+			break;
+		std::string Operand, query_Word;
+		Operand = s.substr(0, 1);
+		query_Word = s.substr(1);
+		if (Operand != "~")
+		{
+			std::cout << "input error ,please input again" << std::endl;
+			continue;
+		}
+		
+		Query q(query_Word);
+		Query q1 = ~q;
+		std::set<TextQuery::line_no> locs = q1.eval(tq);
+		print_results2(locs, q1, tq);
+
+	}
+
+	std::cout << "Ending Testing NotQuery class" << std::endl;
+
+
+
+
+	std::cout << std::endl << std::endl;
+
 
 
 	//test AndQuery
 	std::cout << "Starting Testing AndQuery class" << std::endl;
 	while (true)
 	{
-		std::cin.clear();
+		
 		std::cout << "Enter a AND condition(eg fuck & you) to look for,or q to quit: " << std::endl;
 		std::string s;
 		std::getline(std::cin, s);
@@ -521,8 +562,58 @@ int main()
 
 	}
 
+	std::cout << "Ending Testing AndQuery class" << std::endl;
+
+
+	std::cout << std::endl << std::endl;
+
+	//test OrQuery
+	std::cout << "Starting Testing OrQuery class" << std::endl;
+	while (true)
+	{
+		std::cin.clear();
+		std::cout << "Enter a Or condition(eg fuck | you) to look for,or q to quit: " << std::endl;
+		std::string s;
+		std::getline(std::cin, s);
+		if (!std::cin || s == "q")
+			break;
+		std::stringstream ss;
+		ss << s;
+		std::string left, operand, right;
+		ss >> left >> operand >> right;
+		if (operand != "|")
+		{
+			std::cout << "input error ,please input again" << std::endl;
+			continue;
+		}
+		Query lQuery(left), rQuery(right);
+		Query q = lQuery | rQuery;
+		std::set<TextQuery::line_no> locs = q.eval(tq);
+		print_results2(locs, q, tq);
+
+	}
+	std::cout << "Ending Testing OrQuery class" << std::endl;
+
+
+
+	std::cout << "********************************************************" << std::endl;
+	std::cout << "End One By One Test                                " << std::endl;
+	std::cout << "********************************************************" << std::endl;
+
+	std::cout << std::endl << std::endl;
+
+
+	std::cout << "********************************************************" << std::endl;
+	std::cout << "Starting  All In One Test                               " << std::endl;
+	std::cout << "********************************************************" << std::endl;
+
+	TestSchema(tq);
+
+	std::cout << "********************************************************" << std::endl;
+	std::cout << "End  All In One Test                                    " << std::endl;
+	std::cout << "********************************************************" << std::endl;
+
 
 	return 0;
 
 }
-
