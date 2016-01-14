@@ -1,0 +1,99 @@
+//////////////////////////////////////////////////
+/*    author huqijun ,modify time 20160114      */
+//////////////////////////////////////////////////
+
+
+#include <iostream>
+#include <iterator>
+#include <algorithm>
+#include <fstream>
+#include <list>
+#include <string>
+#include <vector>
+#include <set>
+#include<utility>
+#include<functional>
+#include<stdexcept>
+#include<map>
+#include<sstream>
+
+
+//function template ,to calculate the absoluted value
+template <typename T>
+T absoluteValue(const T& t)
+{
+    if(t < 0)
+        return -t;
+    else return t;
+}
+
+//function template,to write a value to stream
+template <typename T>
+bool writeTostream(std::ostream & os,const T & t)
+{
+    os << t <<std::endl;
+    return true;
+}
+
+
+
+template<typename T>
+void print_elements(const T& m)
+{
+    typename T::size_type length = m.size();
+    typename T::const_iterator i = m.begin();
+    typename T::size_type t = 0;
+    for(; t != length ; ++t )
+    {
+        std::cout<<*i<<std::endl;
+        ++i;
+    }
+
+}
+
+
+
+template<typename T,size_t N>
+void print_length(T (&param)[N])
+{
+    std::cout<<"the length of array is "<<N<<std::endl;
+
+    for(int i = 0; i< N ; ++i)
+    {
+        std::cout<<param[i]<<std::endl;
+    }
+
+}
+
+
+
+//test code
+int main()
+{
+
+
+    std::cout<<absoluteValue(-3)<<std::endl;
+    std::cout<<absoluteValue(-3.52)<<std::endl;
+    std::cout<<absoluteValue(true)<<std::endl;
+
+
+    writeTostream(std::cout,"test function template");
+    writeTostream(std::cout,150);
+    writeTostream(std::cout,151.151);
+    writeTostream(std::cout,'c');
+
+    std::vector<int> ivec(10,1);
+    print_elements(ivec);
+
+    int a[10];
+    print_length(a);
+    char b[]={'1','b','c'};
+    print_length(b);
+
+
+    return 0;
+
+}
+
+
+
