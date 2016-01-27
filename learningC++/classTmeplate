@@ -17,10 +17,13 @@
 #include<map>
 #include<sstream>
 
-
+template<typename Type> class Queue;
+template<typename T> std::ostream& operator<<(std::ostream&,const Queue<T>&);
 template<typename Type>
 class QueueItem
 {
+    friend class Queue<Type>;
+    friend std::ostream& operator<Type> (std::ostream&,const Queue<Type>&);
     //private class:no public section
     //constructor
     QueueItem(const Type &t):item(t),next(0) {}
@@ -88,6 +91,8 @@ template<typename Type> void Queue<Type>::push(const Type& t)
 }
 
 
+
+
 template<typename Type> void Queue<Type>::destroy()
 {
     while(!empty())
@@ -103,8 +108,16 @@ template<typename Type> void Queue<Type>::copy_items(const Queue& q)
         push(p->item);
 }
 
-
-
+template<class Type>
+std::ostream& operator<<(ostream & os,const Queue<Type> & q)
+{
+    os<< "<";
+    QueueItem<Type>* p;
+    for(p = q.head;  p; p = p->next)
+        os<<p->item<<" ";
+    os<<">";
+    return os;
+}
 
 //test code
 int main()
