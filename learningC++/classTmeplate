@@ -1,0 +1,123 @@
+//////////////////////////////////////////////////
+/*    author huqijun ,modify time 20160127      */
+//////////////////////////////////////////////////
+
+
+#include <iostream>
+#include <iterator>
+#include <algorithm>
+#include <fstream>
+#include <list>
+#include <string>
+#include <vector>
+#include <set>
+#include<utility>
+#include<functional>
+#include<stdexcept>
+#include<map>
+#include<sstream>
+
+
+template<typename Type>
+class QueueItem
+{
+    //private class:no public section
+    //constructor
+    QueueItem(const Type &t):item(t),next(0) {}
+    Type item;
+    QueueItem * next;
+};
+
+
+template<typename Type>
+class Queue
+{
+public:
+    //constructor, initail  empty queue
+    Queue():head(0),tail(0) {}
+    //copy control
+    Queue(const Queue& Q):head(0),tail(0) { copy_items(Q);}
+    Queue& operator=(const Queue&);
+    ~Queue(){ destroy(); }
+
+
+
+    // public interface
+    Type& fron() { return head->item; }
+    const Type& fron() const { return head->item; }
+    bool empty const { return head == 0; }
+    void pop();
+    void push(const Type&);
+
+private:
+    QueueItem<Type> * head;
+    QueueItem<Type> * tail;
+
+    void destroy();   // delete all the  elements;
+    void copy_items(const Queue &); // copy all elements from parameter
+
+};
+
+
+template<typename Type> Queue<Type> Queue<Type>::operator=(const Queue<Type> & Q)
+{
+    destroy();
+    head = Q.head;
+    tail = Q.tail;
+}
+
+
+
+template<typename Type> void Queue<Type>::pop()
+{
+    QueueItem<Type> * p = head;
+    head = head->next;
+    delete p;
+}
+
+template<typename Type> void Queue<Type>::push(const Type& t)
+{
+    QueueItem<Type> *pt =  new QueueItem<Type>(t);
+    if(empty())
+        head = tail  = pt;
+    else
+    {
+        tail->next = p;
+        tail = p;
+    }
+}
+
+
+template<typename Type> void Queue<Type>::destroy()
+{
+    while(!empty())
+    {
+        pop();
+    }
+}
+
+
+template<typename Type> void Queue<Type>::copy_items(const Queue& q)
+{
+    for(QueueItem<Type>* p = q.head ;   p ;  p = p->next)
+        push(p->item);
+}
+
+
+
+
+//test code
+int main()
+{
+
+
+
+
+
+    return 0;
+
+}
+
+
+
+
