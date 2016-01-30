@@ -1,0 +1,73 @@
+//////////////////////////////////////////////////
+/*    author huqijun ,modify time 20160130     */
+//////////////////////////////////////////////////
+
+
+#include <iostream>
+#include <iterator>
+#include <algorithm>
+#include <fstream>
+#include <list>
+#include <string>
+#include <vector>
+#include <set>
+#include<utility>
+#include<functional>
+#include<stdexcept>
+#include<map>
+#include<sstream>
+
+
+template<class T>
+T doSomething(const T& t1,const T& t2)
+{
+    if(0 == t2)
+        throw std::runtime_error("right hand side parameter should not be zero");
+    std::cout<<"no exception occurs this run"<<std::endl;
+    return t1/t2;
+}
+
+
+
+
+
+//test code
+int main()
+{
+
+    try
+    {
+        doSomething(5,3);
+        std::cout<<"here has been gone through: A"<<std::endl;
+
+    }catch(std::runtime_error &e)
+    {
+        std::cout<<"here has been gone through: B"<<std::endl;
+        std::cerr<<e.what()<<" Try again. \n"
+        <<std::endl;
+    }
+
+
+      std::cout<<"here has been gone through: C"<<std::endl;
+
+    try
+    {
+        doSomething(5,0);
+        std::cout<<"here has been gone through: D"<<std::endl;
+
+    }catch(std::runtime_error &e)
+    {
+         std::cout<<"here has been gone through: E"<<std::endl;
+        std::cerr<<e.what()<<" Try again. \n"
+        <<std::endl;
+    }
+
+      std::cout<<"here has been gone through: F"<<std::endl;
+
+    return 0;
+
+}
+
+
+
+
